@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация и Читы</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .register, .login {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 0px #333;
+            border: 2px solid #000;
+            text-align: center;
+            display: none; /* Скрыть окна по умолчанию */
+        }
+
+        .active {
+            display: block; /* Показать активное окно */
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #000;
+            background-color: #e0e0e0;
+            color: #333;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        input[type="submit"] {
+            padding: 15px 20px;
+            background-color: #f1c40f;
+            color: #000;
+            border: 2px solid #000;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e67e22;
+            color: #fff;
+        }
+
+        .toggle-link {
+            display: block;
+            margin-top: 15px;
+            color: #333;
+            font-size: 16px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .sidebar {
+            width: 200px;
+            height: calc(100vh - 50px);
+            background-color: #34495e;
+            color: #fff;
+            padding: 15px;
+            display: none; /* Скрыть боковую панель по умолчанию */
+            flex-direction: column;
+        }
+
+        .sidebar h3 {
+            text-align: center;
+        }
+
+        .game-link {
+            margin: 10px 0;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .news-panel {
+            margin-left: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 5px 5px 0px #333;
+            display: none; /* Скрыть новостную панель по умолчанию */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <h3>Игры</h3>
+            <a class="game-link" onclick="showCheats('cs')">CS</a>
+            <a class="game-link" onclick="showCheats('dota2')">Dota 2</a>
+            <a class="game-link" onclick="showCheats('war_thunder')">War Thunder</a>
+            <a class="game-link" onclick="showCheats('fortnite')">Fortnite</a>
+        </div>
+
+        <div class="login" id="login">
+            <h2>Вход в аккаунт</h2>
+            <form onsubmit="login(event)">
+                <input type="text" id="login-username" placeholder="Имя пользователя" required><br>
+                <input type="password" id="login-password" placeholder="Пароль" required><br>
+                <input type="submit" value="Войти">
+            </form>
+            <span class="toggle-link" onclick="showRegister()">Нет аккаунта? Зарегистрируйтесь</span>
+        </div>
+
+        <div class="register active" id="register">
+            <h2>Регистрация</h2>
+            <form onsubmit="register(event)">
+                <input type="text" id="register-username" placeholder="Имя пользователя" required><br>
+                <input type="password" id="register-password" placeholder="Пароль" required><br>
+                <input type="submit" value="Зарегистрироваться">
+            </form>
+            <span class="toggle-link" onclick="showLogin()">Уже есть аккаунт? Войдите</span>
+        </div>
+
+        <div class="news-panel" id="news-panel">
+            <h2>Новости про читы</h2>
+            <p>Здесь будут новости о читах.</p>
+        </div>
+    </div>
+
+    <script>
+        let registeredUsers = {}; // Хранение пользователей
+
+        function register(event) {
+            event.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+
+            if (username && password) {
+                registeredUsers[username] = password;
+                alert("Регистрация успешна! Теперь войдите в систему.");
+                showLogin();
+            } else {
+                alert("Введите имя пользователя и пароль.");
+            }
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            if (registeredUsers[username] && registeredUsers[username] === password) {
+                alert("Авторизация успешна!");
+                document.getElementById('register').style.display = 'none';
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('sidebar').style.display = 'flex'; // Показать боковую панель
+                document.getElementById('news-panel').style.display = 'block'; // Показать новостную панель
+            } else {
+                alert("Неверные данные.");
+            }
+        }
+
+        function showRegister() {
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('register').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('register').style.display = 'none';
+            document.getElementById('login').style.display = 'block';
+        }
+
+        function showCheats(game) {
+            const newsPanel = document.getElementById('news-panel');
+            newsPanel.innerHTML = `<h2>Читы для ${game}</h2><p>Здесь будет информация о читах для игры ${game}.</p>`;
+        }
+    </script>
+</body>
+</html>
